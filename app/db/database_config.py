@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# getting database url using .env 
-DATABASEURL = os.getenv("DB_URL")
+# getting database url using .env
+# DATABASEURL = os.getenv("DB_URL")
+DATABASEURL = "sqlite:///projectflow.db"
 
 # creating engine with the database url
 engine = create_engine(DATABASEURL, echo=True)

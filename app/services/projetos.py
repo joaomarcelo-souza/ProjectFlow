@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.schemas.projetos import ProjetoCreate, ProjetoRead, ProjetoUpdate
+from app.schemas.projetos import ProjetoCreate, ProjetoUpdate
 from app.models.projetos import Projeto
 
 
@@ -7,7 +7,7 @@ def create_projeto(db: Session, projeto_data: ProjetoCreate) -> Projeto:
 
     projeto = Projeto(**projeto_data.model_dump())
 
-    db.add()
+    db.add(projeto)
     db.commit()
     db.refresh(projeto)
 
@@ -34,7 +34,7 @@ def update_projeto(db: Session, projeto_id: int, projeto_data: ProjetoUpdate):
 
     if projeto:
 
-        for field, value in projeto_data.model_dump(exclude_unset=True)
+        for field, value in projeto_data.model_dump(exclude_unset=True).items():
             setattr(projeto, field, value)
 
         db.commit()
@@ -42,9 +42,10 @@ def update_projeto(db: Session, projeto_id: int, projeto_data: ProjetoUpdate):
 
     return projeto
 
+
 def delete_projeto(db: Session, projeto_id: int):
 
-    projeto = get_projeto_by_id(projeto_id)
+    projeto = get_projeto_by_id(db, projeto_id)
 
     if projeto:
 

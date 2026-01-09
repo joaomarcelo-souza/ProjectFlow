@@ -10,12 +10,12 @@ class Tarefa(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     titulo: Mapped[str] = mapped_column(nullable=False)
     status: Mapped[str] = mapped_column(nullable=False, default="pendente")
-    projeto_id: Mapped[int] = mapped_column(ForeignKey="projetos.id")
+    projeto_id: Mapped[int] = mapped_column(ForeignKey("projetos.id"))
 
     projeto: Mapped["Projeto"] = relationship(back_populates="tarefas")
 
-    __table_args__ = UniqueConstraint(
-        "projeto_id", "titulo", name="uq_tarefa_projeto_titulo"
+    __table_args__ = (
+        UniqueConstraint("projeto_id", "titulo", name="uq_tarefa_projeto_titulo"),
     )
 
 

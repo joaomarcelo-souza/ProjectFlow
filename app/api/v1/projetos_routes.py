@@ -22,3 +22,29 @@ def create_new_projeto(projeto: ProjetoCreate, db: Session = Depends(get_db)):
 def get_projetos(db: Session = Depends(get_db)):
 
     return get_all_projetos(db)
+
+
+@router.get("/{projeto_id}", response_model=ProjetoRead, status_code=status.HTTP_200_OK)
+def get_projeto(projeto_id: int, db: Session = Depends(get_db)):
+
+    return get_projeto_by_id(db, projeto_id)
+
+
+@router.put("/{projeto_id}", response_model=ProjetoRead, status_code=status.HTTP_200_OK)
+def update_projeto_by_id(
+    projeto_id: int, projeto: ProjetoUpdate, db: Session = Depends(get_db)
+):
+
+    updated = update_projeto(db, projeto_id, projeto)
+
+    return updated
+
+
+@router.delete(
+    "/{projeto_id}", response_model=ProjetoRead, status_code=status.HTTP_200_OK
+)
+def delete_projeto_by_id(projeto_id: int, db: Session = Depends(get_db)):
+
+    deleted = delete_projeto(db, projeto_id)
+
+    return deleted

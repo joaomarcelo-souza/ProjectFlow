@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    container_name: projectflow_api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  db:
+    image: postgres:16
+    container_name: projectflow_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1013
+      POSTGRES_DB: projectflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

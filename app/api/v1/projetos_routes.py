@@ -15,7 +15,12 @@ router = APIRouter(prefix="/v1/projetos", tags=["Projeto"])
 @router.post("/", response_model=ProjetoRead, status_code=status.HTTP_200_OK)
 def create_new_projeto(projeto: ProjetoCreate, db: Session = Depends(get_db)):
 
-    return create_projeto(db, projeto)
+    created = create_projeto(db, projeto)
+
+    if not created:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST)
+
+    return created
 
 
 @router.get("/", response_model=list[ProjetoRead], status_code=status.HTTP_200_OK)
@@ -27,7 +32,12 @@ def get_projetos(db: Session = Depends(get_db)):
 @router.get("/{projeto_id}", response_model=ProjetoRead, status_code=status.HTTP_200_OK)
 def get_projeto(projeto_id: int, db: Session = Depends(get_db)):
 
-    return get_projeto_by_id(db, projeto_id)
+    updated = get_projeto_by_id(db, projeto_id)
+
+    if not updated:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="ID não encontrado")
+
+    return updated
 
 
 @router.put("/{projeto_id}", response_model=ProjetoRead, status_code=status.HTTP_200_OK)
